@@ -1,0 +1,79 @@
+﻿@page "/businesscodes"
+@inject HttpClient Http
+
+<h2>Government & Industry Codes</h2>
+
+@if (gcodes == null)
+{
+    <p><em>Loading BizCodes...</em></p>
+}
+else
+{
+    <p> <strong>NAICS CODES:</strong></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>NAICS Code</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gcode in gcodes)
+            {
+                int thisCode = @gcode.GNaicsDescription.Length;
+                if (thisCode > 0)
+                {
+                    <tr>
+                        <td>@gcode.GNaicsCode</td>
+                        <td>@gcode.GNaicsDescription</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <p> <strong>BUSINESS GOVERNMENT CODES:</strong></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gcode in gcodes)
+            {
+                int thisCode = @gcode.GCode.Length;
+                if (thisCode > 0)
+                {
+                    <tr>
+                        <td>@gcode.GDescription</td>
+                        <td>@gcode.GCode</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+}
+
+<section>
+    <hr />
+    <h4>For further information, please contact:</h4>
+</section>
+
+@code {
+    private GvtCode[] gcodes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        gcodes = await Http.GetFromJsonAsync<GvtCode[]>("site-data/gicodes.json");
+    }
+
+    public class GvtCode
+    {
+        public string GDescription { get; set; }
+        public string GCode { get; set; }
+        public string GNaicsCode { get; set; }
+        public string GNaicsDescription { get; set; }
+    }
+}

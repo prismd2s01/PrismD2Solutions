@@ -1,0 +1,38 @@
+TODO= RemoveBelow??sNCutthisLine AFTER GeneratePAT&SECRET for repo "prismd2s" then=>AddSecretNameBelow........................
+
+name: 'Deploy PrismD2Solutions'
+
+# Below actions run on...with below jobs:...
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+        # Checkout the code
+        - uses: actions/checkout@v2
+
+        # Install .NET Core SDK
+        - name: Setup .NET Core
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: 3.1.x
+
+        # Publish app
+        - name: Publish
+          run: dotnet publish PrismD2Solutions.csproj --configuration Release
+
+        # Deploy website to GitHub Pages
+        - name: GitHub Pages action
+          if: ${{ github.ref == 'refs/heads/master' }} # Publish only when the push is on master
+          uses: peaceiris/actions-gh-pages@v3.6.1
+          with:
+            github_token: ${{ ????secrets.PUBLISH_TOKEN }}
+            publish_branch: gh-pages
+            publish_dir: bin/Release/netstandard2.1/publish/wwwroot
+            allow_empty_commit: false
+            keep_files: false
+            force_orphan: true
+
+            # TODO Upon successful app launch at GitHub Pages Settings link- uncomment below line and/or config CNAME & custom domain
+            # cname: ?www.? prismd2s.com
