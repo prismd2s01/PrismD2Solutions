@@ -1,0 +1,40 @@
+name: DeployPrismD2Solutions
+
+# Sequence of workflow ACTIONS triggered by PUSH event in Master branch
+on: 
+  push:
+    branches: [ master ]
+
+jobs:
+  # Job key
+  build:
+    # Job name
+    name: PrismD2Solutions code base
+    # Run machineType
+    runs-on: ubuntu-latest
+
+    steps:
+        # Check out copy of repoCode onto latest above machine 
+        - uses: actions/checkout@v2
+
+        # Install .NET Core SDK
+        - name: Setup .NET Core
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: 3.1.x
+
+        # Publish app
+        - name: Publish
+          run: dotnet publish PrismD2Solutions.csproj --configuration Release
+
+        # Deploy site to GitHub Pages
+        - name: Run DeployPrismD2Solutions
+          if: success()
+          uses: peaceiris/actions-gh-pages@v3.6.1
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            PUBLISH_BRANCH: master
+            PUBLISH_DIR: bin/Release/netstandard2.1/publish/wwwroot
+            ALLOW_EMPTY_COMMIT: false
+            KEEP_FILES: false
+            FORCE_ORPHAN: true
