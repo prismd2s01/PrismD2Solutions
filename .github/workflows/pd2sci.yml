@@ -33,7 +33,7 @@ jobs:
           uses: peaceiris/actions-gh-pages@v3.6.1
           with:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            PUBLISH_BRANCH: master
+            PUBLISH_BRANCH: gh-pages
             PUBLISH_DIR: bin/Release/netstandard2.1/publish/wwwroot
             ALLOW_EMPTY_COMMIT: false
             KEEP_FILES: false
