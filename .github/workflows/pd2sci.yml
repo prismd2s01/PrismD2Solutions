@@ -38,4 +38,4 @@ jobs:
             ALLOW_EMPTY_COMMIT: false
             KEEP_FILES: false
             FORCE_ORPHAN: true
-            CNAME: prismd2s.com
+            CNAME: www.prismd2s.com
